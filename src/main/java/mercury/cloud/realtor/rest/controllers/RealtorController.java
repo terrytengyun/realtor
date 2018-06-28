@@ -3,6 +3,7 @@ package mercury.cloud.realtor.rest.controllers;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import mercury.cloud.realtor.rest.entities.Realtor;
 import mercury.cloud.realtor.rest.services.RealtorService;
 
+@CrossOrigin(origins = "*")
 @RestController
 public class RealtorController {
 	
