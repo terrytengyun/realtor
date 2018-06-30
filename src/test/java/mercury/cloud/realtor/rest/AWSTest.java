@@ -23,7 +23,7 @@ public class AWSTest {
         String fileName = "C:\\Development\\realtors\\realtorSite\\realtor.front\\dest\\images\\test2.jpg";
 
         try {
-        	AWSCredentials credentials = new BasicAWSCredentials("", "");
+        	AWSCredentials credentials = new BasicAWSCredentials("test", "test");
             AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
                     .withRegion(clientRegion)
                     .withCredentials(new AWSStaticCredentialsProvider(credentials))
