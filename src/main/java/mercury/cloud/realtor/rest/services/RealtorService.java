@@ -14,6 +14,8 @@ public class RealtorService {
 	@Autowired
 	private RealtorDao realtorDao;
 	
+	
+	
 	public Realtor save(Realtor realtor) {
 		return realtorDao.save(realtor);
 	}
