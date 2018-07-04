@@ -3,55 +3,86 @@ package mercury.cloud.realtor.rest.entities;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="property")
+@Table(name="PROPERTY")
 public class Property {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name="ID")
 	private int id;
 	
-	@Column(name="property_type")
+	@Column(name="PROPERTY_TYPE")
 	private String propertyType;
 	
-	@Column(name="address")
+	@Column(name="ADDRESS")
 	private String address;
 	
-	@Column(name="city")
+	@Column(name="CITY")
 	private String city;
 	
-	@Column(name="thumbnail")
+	@Column(name="THUMBNAIL")
 	private String thumbnail;
 	
-	@Column(name="title")
+	@Column(name="TITLE")
 	private String title;
 	
-	@Column(name="listing_price")
+	@Column(name="LISTING_PRICE")
 	private String listingPrice;
 	
-	@Column(name="bed_count")
+	@Column(name="BED_COUNT")
 	private int numBed;
 	
-	@Column(name="bath_count")
+	@Column(name="BATH_COUNT")
 	private int numBath;
 	
-	@Column(name="square_feet")
+	@Column(name="SQUARE_FEET")
 	private int squareFeet;
 	
-	@OneToMany
+	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL) // Cascading
+	@JoinTable(
+			name="PROPERTY_IMAGE_REL", 
+			joinColumns=@JoinColumn(name="PROPERTY_ID"),
+			inverseJoinColumns=@JoinColumn(name="IMAGE_ID")
+			)
 	private Collection<PropertyImage> images = new ArrayList<PropertyImage>();
 	
+	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL) // Cascading
+	@JoinTable(
+			name="PROPERTY_CUSTOM_FIELD_REL",
+			joinColumns=@JoinColumn(name="PROPERTY_ID"),
+			inverseJoinColumns=@JoinColumn(name="FIELD_ID")
+			)
+	private Collection<PropertyCustomField> customFeilds = new ArrayList<PropertyCustomField>();
 	
 	
+	
+	
+	
+	public Collection<PropertyImage> getImages() {
+		return images;
+	}
+	public void setImages(Collection<PropertyImage> images) {
+		this.images = images;
+	}
+	public Collection<PropertyCustomField> getCustomFeilds() {
+		return customFeilds;
+	}
+	public void setCustomFeilds(Collection<PropertyCustomField> customFeilds) {
+		this.customFeilds = customFeilds;
+	}
 	public int getId() {
 		return id;
 	}

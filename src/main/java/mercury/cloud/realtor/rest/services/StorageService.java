@@ -36,36 +36,51 @@ public class StorageService {
 	
 
 	
-	public PutObjectResult upload(MultipartFile file, String key) {
-		
-		PutObjectResult result = null;
-		
-		if(!file.isEmpty()) {
+	public void uploadFiles(MultipartFile[] files, String key) {
 
-            ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentType(file.getContentType());
-			try {
-				result = s3.putObject(this.bucket, key, file.getInputStream(), metadata);
-				
-				
-			} catch (AmazonServiceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SdkClientException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		if(files.length > 0 ) {
+
+			int i = 0;
+			for(MultipartFile file : files) {
+					uploadFile(file, key+i);
+					i++;
+				}
 		}
+            
 		
-		return result;
+		
 	}
+	
+	public void uploadFile(MultipartFile file, String key) {
+
+					if(!file.isEmpty()) {
+						
+						ObjectMetadata metadata = new ObjectMetadata();
+			            metadata.setContentType(file.getContentType());
+						try {
+							s3.putObject(this.bucket, key, file.getInputStream(), metadata);
+						} catch (AmazonServiceException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (SdkClientException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					
+					}
+
+		}
 	
 	public String getFile(String key) {
 		S3Object file = s3.getObject(this.bucket, key);
 		return null;
+	}
+	
+	public void delete(String key) {
+		s3.deleteObject(bucket, key);
 	}
 	
 

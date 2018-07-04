@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +29,12 @@ public class RealtorController {
 	
 	@PostMapping(value="/realtor")
 	public Realtor save(@RequestBody Realtor realtor) {
+		return realtorService.save(realtor);
+	}
+	
+	@PutMapping(value="/realtor/{id}")
+	public Realtor update(@RequestBody Realtor realtor, @PathVariable(value="id") int id) {
+		realtor.setId(id);
 		return realtorService.save(realtor);
 	}
 	

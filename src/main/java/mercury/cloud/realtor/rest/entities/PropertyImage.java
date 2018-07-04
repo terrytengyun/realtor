@@ -22,6 +22,12 @@ public class PropertyImage {
 	@Column(name="url")
 	private String url;
 	
+	@Column(name="bucket")
+	private String bucket;
+	
+	@Column(name="path_name")
+	private String pathname;
+	
 	@Column(name="description")
 	private String description;
 
@@ -31,6 +37,24 @@ public class PropertyImage {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	
+
+	public String getBucket() {
+		return bucket;
+	}
+
+	public void setBucket(String bucket) {
+		this.bucket = bucket;
+	}
+
+	public String getPathname() {
+		return pathname;
+	}
+
+	public void setPathname(String pathname) {
+		this.pathname = pathname;
 	}
 
 	public int getPropertyId() {
