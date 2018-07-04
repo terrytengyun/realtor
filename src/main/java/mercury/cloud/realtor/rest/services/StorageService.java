@@ -36,7 +36,7 @@ public class StorageService {
 	
 
 	
-	public PutObjectResult upload(MultipartFile file, String id) {
+	public PutObjectResult upload(MultipartFile file, String key) {
 		
 		PutObjectResult result = null;
 		
@@ -45,7 +45,8 @@ public class StorageService {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(file.getContentType());
 			try {
-				result = s3.putObject(this.bucket, id, file.getInputStream(), metadata);
+				result = s3.putObject(this.bucket, key, file.getInputStream(), metadata);
+				
 				
 			} catch (AmazonServiceException e) {
 				// TODO Auto-generated catch block
@@ -62,8 +63,8 @@ public class StorageService {
 		return result;
 	}
 	
-	public String getFile(String id) {
-		S3Object file = s3.getObject(this.bucket, id);
+	public String getFile(String key) {
+		S3Object file = s3.getObject(this.bucket, key);
 		return null;
 	}
 	
