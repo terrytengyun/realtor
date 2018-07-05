@@ -1,6 +1,9 @@
 package mercury.cloud.realtor.rest.services;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +14,6 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.services.s3.model.S3Object;
 
 import mercury.cloud.realtor.rest.configurations.ConfigPropertiesBase;
@@ -34,20 +36,28 @@ public class StorageService {
 	public StorageService() {
 	}
 	
+	public String getBucket() {
+		return bucket;
+	}
+	
 
 	
-	public void uploadFiles(MultipartFile[] files, String key) {
+	public Map<String,String> uploadFiles(MultipartFile[] files, String key) {
 
+		Map<String,String> urls = new HashMap<String, String>();
+		
 		if(files.length > 0 ) {
-
+			String filename = "";
 			int i = 0;
 			for(MultipartFile file : files) {
-					uploadFile(file, key+i);
+					filename = key+"-"+i;
+					uploadFile(file, filename);
+					urls.put(filename, s3.getUrl(bucket, filename).toString());
 					i++;
 				}
 		}
             
-		
+		return urls;
 		
 	}
 	

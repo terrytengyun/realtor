@@ -1,6 +1,7 @@
 package mercury.cloud.realtor.rest.controllers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,15 +37,36 @@ public class PropertyController {
 	}
 	
 	@PostMapping(value="/property")
-	public Property save(@RequestParam(value="description") String desc, @RequestParam(value="imgs") MultipartFile[] imgs){
+	public Property save(
+			@RequestParam(value="description") String description,
+			@RequestParam(value="address") String address,
+			@RequestParam(value="city") String city,
+			@RequestParam(value="thumbnail") String thumbnail,
+			@RequestParam(value="title") String title,
+			@RequestParam(value="listingPrice") String listingPrice,
+			@RequestParam(value="numBed") int numBed,
+			@RequestParam(value="numBath") int numBath,
+			@RequestParam(value="squareFeet") int squareFeet,
+			@RequestParam(value="mlsNumber") String mlsNumber,
+			@RequestParam(value="images") MultipartFile[] images){
+
 		
-		for(MultipartFile image : imgs) {
-			
-		}
+		Property property = new Property();
+		property.setAddress(address);
+		property.setCity(city);
+		property.setListingPrice(listingPrice);
+		property.setThumbnail(thumbnail);
+		property.setTitle(title);
+		property.setNumBath(numBath);
+		property.setNumBed(numBed);
+		property.setSquareFeet(squareFeet);
+		property.setMlsNumber(mlsNumber);
+		
+		
+		return propertyService.saveWithImages(property, images);
 		
 		// store images in AWS storage first
 		//return this.propertyService.save(property);
-		return null;
 	}
 	
 	@PutMapping(value="/property/{id}")
@@ -57,22 +79,13 @@ public class PropertyController {
 	
 	@DeleteMapping(value="/property/{id}")
 	public void deleteById(@PathVariable int id){
-		Optional<Property> deletedProperty = this.propertyService.findById(id);
+		propertyService.deleteById(id);
 		
-		if(deletedProperty.isPresent()) {
-		
-			ArrayList<PropertyImage> images = (ArrayList<PropertyImage>) deletedProperty.get().getImages();
-			
-			//---- how to make them like a transaction?
-			
-			for(PropertyImage image : images) {
-				this.storageService.delete(image.getPathname());
-			}
-			
-			this.propertyService.deleteById(id);
-		}
-		
-		
+	}
+	
+	@DeleteMapping(value="/property/{id}/image/{imageId}")
+	public void deleteImage(@PathVariable(value="id") int id, @PathVariable(value="imageId") int imageId){
+		propertyService.deleteImage(id, imageId);
 	}
 	
 	

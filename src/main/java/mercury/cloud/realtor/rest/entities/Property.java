@@ -24,6 +24,9 @@ public class Property {
 	@Column(name="ID")
 	private int id;
 	
+	@Column(name="MLS_NUMBER")
+	private String mlsNumber;
+	
 	@Column(name="PROPERTY_TYPE")
 	private String propertyType;
 	
@@ -51,7 +54,7 @@ public class Property {
 	@Column(name="SQUARE_FEET")
 	private int squareFeet;
 	
-	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL) // Cascading
+	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true) // Cascading
 	@JoinTable(
 			name="PROPERTY_IMAGE_REL", 
 			joinColumns=@JoinColumn(name="PROPERTY_ID"),
@@ -71,6 +74,13 @@ public class Property {
 	
 	
 	
+
+	public String getMlsNumber() {
+		return mlsNumber;
+	}
+	public void setMlsNumber(String mlsNumber) {
+		this.mlsNumber = mlsNumber;
+	}
 	public Collection<PropertyImage> getImages() {
 		return images;
 	}

@@ -16,8 +16,10 @@ public class PropertyImage {
 	@Column(name="id")
 	private int id;
 	
+	/*
 	@Column(name="property_id")
 	private int propertyId;
+	*/
 	
 	@Column(name="url")
 	private String url;
@@ -57,6 +59,7 @@ public class PropertyImage {
 		this.pathname = pathname;
 	}
 
+	/*
 	public int getPropertyId() {
 		return propertyId;
 	}
@@ -64,6 +67,7 @@ public class PropertyImage {
 	public void setPropertyId(int propertyId) {
 		this.propertyId = propertyId;
 	}
+	*/
 
 	public String getUrl() {
 		return url;
