@@ -10,42 +10,44 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import mercury.cloud.realtor.rest.entities.Realtor;
+import mercury.cloud.realtor.rest.entities.RealtorProfile;
 import mercury.cloud.realtor.rest.services.RealtorService;
 
 @CrossOrigin(origins = "*")
 @RestController
+@RequestMapping(value="/realtor")
 public class RealtorController {
 	
 	@Autowired
 	private RealtorService realtorService;
 	
-	@GetMapping(value="/realtor/{id}")
-	public Optional<Realtor> findById(@PathVariable("id") Integer id) {
-		return realtorService.findById(id);
+	@GetMapping(value="/profile/{id}")
+	public Optional<RealtorProfile> findProfileById(@PathVariable("id") Integer id) {
+		return realtorService.findProfileById(id);
 	}
 	
-	@PostMapping(value="/realtor")
-	public Realtor save(@RequestBody Realtor realtor) {
-		return realtorService.save(realtor);
+	@PostMapping(value="/profile")
+	public RealtorProfile save(@RequestBody RealtorProfile realtorProfile) {
+		return realtorService.saveProfile(realtorProfile);
 	}
 	
-	@PutMapping(value="/realtor/{id}")
-	public Realtor update(@RequestBody Realtor realtor, @PathVariable(value="id") int id) {
-		realtor.setId(id);
-		return realtorService.save(realtor);
+	@PutMapping(value="/profile/{id}")
+	public RealtorProfile update(@RequestBody RealtorProfile realtorProfile, @PathVariable(value="id") int id) {
+		realtorProfile.setId(id);
+		return realtorService.saveProfile(realtorProfile);
 	}
 	
-	@DeleteMapping(value="/realtor/{id}") 
+	@DeleteMapping(value="/profile/{id}") 
 	public void deleteById(@PathVariable("id") Integer id) {
-		realtorService.deleteById(id);
+		realtorService.deleteProfileById(id);
 	}
 	
-	@DeleteMapping(value="/realtor")
-	public void delete(@RequestBody Realtor realtor) {
-		realtorService.delete(realtor);
+	@DeleteMapping(value="/profile")
+	public void delete(@RequestBody RealtorProfile realtorProfile) {
+		realtorService.deleteProfile(realtorProfile);
 	}
 
 }

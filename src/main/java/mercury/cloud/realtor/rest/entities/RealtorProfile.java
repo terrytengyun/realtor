@@ -8,8 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="realtor")
-public class Realtor {
+@Table(name="realtor_profile")
+public class RealtorProfile {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -38,6 +38,9 @@ public class Realtor {
 	@Column(name="title")
 	private String title;
 	
+	@Column(name="avatar")
+	private String avatar;
+	
 	@Column(name="image")
 	private String image;
 
@@ -47,6 +50,14 @@ public class Realtor {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 
 	public String getFirstName() {

@@ -5,31 +5,60 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import mercury.cloud.realtor.rest.daos.RealtorDao;
-import mercury.cloud.realtor.rest.entities.Realtor;
+import mercury.cloud.realtor.rest.daos.RealtorAccountDao;
+import mercury.cloud.realtor.rest.daos.RealtorProfileDao;
+import mercury.cloud.realtor.rest.entities.RealtorAccount;
+import mercury.cloud.realtor.rest.entities.RealtorProfile;
 
 @Service
 public class RealtorService {
 	
 	@Autowired
-	private RealtorDao realtorDao;
+	private RealtorProfileDao realtorProfileDao;
+	
+	@Autowired
+	private RealtorAccountDao realtorAccountDao;
 	
 	
+	/* 
+	 *  Realtor Profiles related
+	 * */
 	
-	public Realtor save(Realtor realtor) {
-		return realtorDao.save(realtor);
+	public RealtorProfile saveProfile(RealtorProfile realtorProfile) {
+		return realtorProfileDao.save(realtorProfile);
 	}
 	
-	public Optional<Realtor> findById(Integer id) {
-		return realtorDao.findById(id);
+	public Optional<RealtorProfile> findProfileById(int id) {
+		return realtorProfileDao.findById(id);
 	}
 	
-	public void deleteById(Integer id) {
-		realtorDao.deleteById(id);
+	public void deleteProfileById(int id) {
+		realtorProfileDao.deleteById(id);
 	}
 	
-	public void delete(Realtor realtor) {
-		realtorDao.delete(realtor);
+	public void deleteProfile(RealtorProfile realtorProfile) {
+		realtorProfileDao.delete(realtorProfile);
+	}
+	
+	/* 
+	 * Realtor Account related
+	 * 
+	 * */
+	
+	public RealtorAccount saveAccount(RealtorAccount realtorAccount) {
+		return realtorAccountDao.save(realtorAccount);
+	}
+	
+	public Optional<RealtorAccount> findAccountById(int id) {
+		return realtorAccountDao.findById(id);
+	}
+	
+	public void deleteAccountById(int id) {
+		realtorAccountDao.deleteById(id);
+	}
+	
+	public void deleteAccount(RealtorAccount realtorAccount) {
+		realtorAccountDao.delete(realtorAccount);
 	}
 	
 	
