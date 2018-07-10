@@ -58,6 +58,19 @@ public class Company {
 		inverseJoinColumns= {@JoinColumn(name="customer_id")}
 	)
 	private Set<Customer> customers;
+	
+	@Column(name="status")
+	private String status;
+	
+	
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	public String getName() {
 		return name;

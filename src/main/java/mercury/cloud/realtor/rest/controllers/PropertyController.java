@@ -1,7 +1,6 @@
 package mercury.cloud.realtor.rest.controllers;
 
-import java.util.ArrayList;
-import java.util.Collection;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import mercury.cloud.realtor.rest.entities.Property;
-import mercury.cloud.realtor.rest.entities.PropertyImage;
 import mercury.cloud.realtor.rest.services.PropertyService;
-import mercury.cloud.realtor.rest.services.StorageService;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -28,8 +25,6 @@ public class PropertyController {
 	@Autowired
 	private PropertyService propertyService;
 	
-	@Autowired
-	private StorageService storageService;
 	
 	@GetMapping(value="/property/{id}")
 	public Optional<Property> findById(@PathVariable(value="id") int id) {

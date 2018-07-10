@@ -28,4 +28,46 @@ public class RealtorAccount {
 		inverseJoinColumns= {@JoinColumn(name="profile_id")}
 	)
 	private Set<RealtorProfile> profiles;
+	
+	@Column(name="cell_phone", nullable=false)
+	private String cellPhone;
+	
+	@Column(name="status")
+	private String status;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Set<RealtorProfile> getProfiles() {
+		return profiles;
+	}
+
+	public void setProfiles(Set<RealtorProfile> profiles) {
+		this.profiles = profiles;
+	}
+
+	public String getCellPhone() {
+		return cellPhone;
+	}
+
+	public void setCellPhone(String cellPhone) {
+		this.cellPhone = cellPhone;
+	}
+	
+	
+	
+	
 }

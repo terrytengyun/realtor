@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import mercury.cloud.realtor.rest.entities.RealtorAccount;
 import mercury.cloud.realtor.rest.entities.RealtorProfile;
 import mercury.cloud.realtor.rest.services.RealtorService;
 
@@ -24,30 +25,65 @@ public class RealtorController {
 	@Autowired
 	private RealtorService realtorService;
 	
+	
+	/*
+	 *  Realtor profile methods
+	 */
+	
 	@GetMapping(value="/profile/{id}")
 	public Optional<RealtorProfile> findProfileById(@PathVariable("id") Integer id) {
 		return realtorService.findProfileById(id);
 	}
 	
 	@PostMapping(value="/profile")
-	public RealtorProfile save(@RequestBody RealtorProfile realtorProfile) {
+	public RealtorProfile saveProfile(@RequestBody RealtorProfile realtorProfile) {
 		return realtorService.saveProfile(realtorProfile);
 	}
 	
 	@PutMapping(value="/profile/{id}")
-	public RealtorProfile update(@RequestBody RealtorProfile realtorProfile, @PathVariable(value="id") int id) {
+	public RealtorProfile updateProfile(@RequestBody RealtorProfile realtorProfile, @PathVariable(value="id") int id) {
 		realtorProfile.setId(id);
 		return realtorService.saveProfile(realtorProfile);
 	}
 	
 	@DeleteMapping(value="/profile/{id}") 
-	public void deleteById(@PathVariable("id") Integer id) {
+	public void deleteProfileById(@PathVariable("id") Integer id) {
 		realtorService.deleteProfileById(id);
 	}
 	
 	@DeleteMapping(value="/profile")
-	public void delete(@RequestBody RealtorProfile realtorProfile) {
+	public void deleteProfile(@RequestBody RealtorProfile realtorProfile) {
 		realtorService.deleteProfile(realtorProfile);
+	}
+	
+	/*
+	 *  Realtor Account methods
+	 */
+	
+	@GetMapping(value="/account/{id}")
+	public Optional<RealtorAccount> findAccountById(@PathVariable("id") Integer id) {
+		return realtorService.findAccountById(id);
+	}
+	
+	@PostMapping(value="/account")
+	public RealtorAccount saveAccount(@RequestBody RealtorAccount realtorAccount) {
+		return realtorService.saveAccount(realtorAccount);
+	}
+	
+	@PutMapping(value="/account/{id}")
+	public RealtorAccount update(@RequestBody RealtorAccount realtorAccount, @PathVariable(value="id") int id) {
+		realtorAccount.setId(id);
+		return realtorService.saveAccount(realtorAccount);
+	}
+	
+	@DeleteMapping(value="/account/{id}") 
+	public void deleteAccountById(@PathVariable("id") Integer id) {
+		realtorService.deleteAccountById(id);
+	}
+	
+	@DeleteMapping(value="/account")
+	public void deleteAccount(@RequestBody RealtorAccount realtorAccount) {
+		realtorService.deleteAccount(realtorAccount);
 	}
 
 }

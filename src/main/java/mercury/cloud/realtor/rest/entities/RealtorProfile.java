@@ -23,8 +23,6 @@ public class RealtorProfile {
 	@Column(name="last_name", nullable=false)
 	private String lastName;
 	
-	@Column(name="cell_phone")
-	private String cellPhone;
 	
 	@Column(name="office_phone")
 	private String officePhone;
@@ -76,13 +74,6 @@ public class RealtorProfile {
 		this.lastName = lastName;
 	}
 
-	public String getCellPhone() {
-		return cellPhone;
-	}
-
-	public void setCellPhone(String cellPhone) {
-		this.cellPhone = cellPhone;
-	}
 
 	public String getOfficePhone() {
 		return officePhone;
