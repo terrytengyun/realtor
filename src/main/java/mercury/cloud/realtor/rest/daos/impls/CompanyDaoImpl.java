@@ -3,7 +3,7 @@ package mercury.cloud.realtor.rest.daos.impls;
 import java.util.Optional;
 
 
-import javax.transaction.Transactional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,7 +19,6 @@ public class CompanyDaoImpl implements CompanyInterface{
 	private CompanyDao companyDao;
 	
 	@Override
-	@Transactional
 	public Company update(Company company) {
 		
 		return companyDao.save(company);

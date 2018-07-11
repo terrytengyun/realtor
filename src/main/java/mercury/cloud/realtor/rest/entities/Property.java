@@ -54,6 +54,9 @@ public class Property {
 	@Column(name="SQUARE_FEET")
 	private int squareFeet;
 	
+	@Column(name="featured")
+	private boolean featured;
+	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true) // Cascading
 	@JoinTable(
 			name="PROPERTY_IMAGE_REL", 
@@ -75,6 +78,12 @@ public class Property {
 	
 	
 
+	public boolean isFeatured() {
+		return featured;
+	}
+	public void setFeatured(boolean featured) {
+		this.featured = featured;
+	}
 	public String getMlsNumber() {
 		return mlsNumber;
 	}
