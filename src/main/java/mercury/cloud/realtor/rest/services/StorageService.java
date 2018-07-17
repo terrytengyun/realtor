@@ -14,6 +14,7 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.Permission;
 import com.amazonaws.services.s3.model.S3Object;
 
 import mercury.cloud.realtor.rest.configurations.ConfigPropertiesBase;
@@ -67,8 +68,10 @@ public class StorageService {
 						
 						ObjectMetadata metadata = new ObjectMetadata();
 			            metadata.setContentType(file.getContentType());
+			           
 						try {
 							s3.putObject(this.bucket, key, file.getInputStream(), metadata);
+							
 						} catch (AmazonServiceException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

@@ -26,13 +26,18 @@ public class PropertyService {
 	}
 	
 	public Property saveWithImages(Property property, MultipartFile[] images) {
-		Map<String,String> imgs = storageService.uploadFiles(images, property.getMlsNumber());
+		Map<String,String> imgs = storageService.uploadFiles(images, property.getPropertyBasicField().getMlsNumber());
 		for(Map.Entry<String, String> entry : imgs.entrySet()) {
 			PropertyImage propertyImage = new PropertyImage();
 			propertyImage.setBucket(storageService.getBucket());
 			propertyImage.setPathname(entry.getKey());
 			propertyImage.setUrl(entry.getValue());
 			property.getImages().add(propertyImage);
+		}
+		//set thumbnail 
+		if(imgs.size()>0) {
+			Map.Entry<String, String> entry = imgs.entrySet().iterator().next();
+			property.getPropertyBasicField().setThumbnail(entry.getValue());
 		}
 		return save(property);	
 	}

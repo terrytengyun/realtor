@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import mercury.cloud.realtor.rest.entities.Property;
+import mercury.cloud.realtor.rest.entities.PropertyBasicField;
 import mercury.cloud.realtor.rest.services.PropertyService;
 
 @CrossOrigin(origins = "*")
@@ -36,7 +37,6 @@ public class PropertyController {
 			@RequestParam(value="description") String description,
 			@RequestParam(value="address") String address,
 			@RequestParam(value="city") String city,
-			@RequestParam(value="thumbnail") String thumbnail,
 			@RequestParam(value="title") String title,
 			@RequestParam(value="listingPrice") String listingPrice,
 			@RequestParam(value="numBed") int numBed,
@@ -47,15 +47,18 @@ public class PropertyController {
 
 		
 		Property property = new Property();
-		property.setAddress(address);
-		property.setCity(city);
-		property.setListingPrice(listingPrice);
-		property.setThumbnail(thumbnail);
-		property.setTitle(title);
-		property.setNumBath(numBath);
-		property.setNumBed(numBed);
-		property.setSquareFeet(squareFeet);
-		property.setMlsNumber(mlsNumber);
+		PropertyBasicField propertyBasicField = new PropertyBasicField();
+		propertyBasicField.setDescription(description);
+		propertyBasicField.setAddress(address);
+		propertyBasicField.setCity(city);
+		propertyBasicField.setListingPrice(listingPrice);
+		propertyBasicField.setTitle(title);
+		propertyBasicField.setNumBath(numBath);
+		propertyBasicField.setNumBed(numBed);
+		propertyBasicField.setSquareFeet(squareFeet);
+		propertyBasicField.setMlsNumber(mlsNumber);
+		
+		property.setPropertyBasicField(propertyBasicField);
 		
 		
 		return propertyService.saveWithImages(property, images);
