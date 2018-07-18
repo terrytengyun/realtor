@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import mercury.cloud.realtor.rest.daos.RealtorAccountDao;
 import mercury.cloud.realtor.rest.daos.RealtorProfileDao;
@@ -19,12 +20,23 @@ public class RealtorService {
 	@Autowired
 	private RealtorAccountDao realtorAccountDao;
 	
+	@Autowired
+	private StorageService storageService;
+	
 	
 	/* 
 	 *  Realtor Profiles related
 	 * */
 	
 	public RealtorProfile saveProfile(RealtorProfile realtorProfile) {
+		return realtorProfileDao.save(realtorProfile);
+	}
+	
+	public RealtorProfile saveProfile(RealtorProfile realtorProfile, MultipartFile avatar, MultipartFile image) {
+		
+		String key = realtorProfile.getFirstName()+"_"+realtorProfile.getLastName()+"_"+realtorProfile.getOfficePhone();
+		realtorProfile.setAvatar(storageService.uploadFile(avatar, key+"_avatar"));
+		realtorProfile.setImage(storageService.uploadFile(image, key+"_image"));
 		return realtorProfileDao.save(realtorProfile);
 	}
 	

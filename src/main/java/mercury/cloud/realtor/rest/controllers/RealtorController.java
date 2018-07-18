@@ -11,8 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import mercury.cloud.realtor.rest.entities.Property;
+import mercury.cloud.realtor.rest.entities.PropertyBasicField;
 import mercury.cloud.realtor.rest.entities.RealtorAccount;
 import mercury.cloud.realtor.rest.entities.RealtorProfile;
 import mercury.cloud.realtor.rest.services.RealtorService;
@@ -35,10 +39,38 @@ public class RealtorController {
 		return realtorService.findProfileById(id);
 	}
 	
+	/*
 	@PostMapping(value="/profile")
 	public RealtorProfile saveProfile(@RequestBody RealtorProfile realtorProfile) {
 		return realtorService.saveProfile(realtorProfile);
+	}*/
+	
+	@PostMapping(value="/profile")
+	public RealtorProfile save(
+			@RequestParam(value="description") String description,
+			@RequestParam(value="firstName") String firstName,
+			@RequestParam(value="lastName") String lastName,
+			@RequestParam(value="title") String title,
+			@RequestParam(value="email") String email,
+			@RequestParam(value="officePhone") String officePhone,
+			@RequestParam(value="avatar") MultipartFile avatar,
+			@RequestParam(value="image") MultipartFile image){
+
+		
+		RealtorProfile realtorProfile = new RealtorProfile();
+		realtorProfile.setDescription(description);
+		realtorProfile.setFirstName(firstName);
+		realtorProfile.setLastName(lastName);
+		realtorProfile.setTitle(title);
+		realtorProfile.setEmail(email);
+		realtorProfile.setOfficePhone(officePhone);
+		
+		return realtorService.saveProfile(realtorProfile, avatar, image);
+		
+		// store images in AWS storage first
+		//return this.propertyService.save(property);
 	}
+	
 	
 	@PutMapping(value="/profile/{id}")
 	public RealtorProfile updateProfile(@RequestBody RealtorProfile realtorProfile, @PathVariable(value="id") int id) {

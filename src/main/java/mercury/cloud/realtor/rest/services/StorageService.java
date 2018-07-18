@@ -62,29 +62,31 @@ public class StorageService {
 		
 	}
 	
-	public void uploadFile(MultipartFile file, String key) {
+	public String uploadFile(MultipartFile file, String key) {
 
-					if(!file.isEmpty()) {
-						
-						ObjectMetadata metadata = new ObjectMetadata();
-			            metadata.setContentType(file.getContentType());
-			           
-						try {
-							s3.putObject(this.bucket, key, file.getInputStream(), metadata);
-							
-						} catch (AmazonServiceException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (SdkClientException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+			if(!file.isEmpty()) {
+				
+				ObjectMetadata metadata = new ObjectMetadata();
+	            metadata.setContentType(file.getContentType());
+	           
+				try {
+					s3.putObject(this.bucket, key, file.getInputStream(), metadata);
+					return s3.getUrl(bucket, key).toString();
 					
-					}
-
+					
+				} catch (AmazonServiceException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SdkClientException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+			}
+			return null;
 		}
 	
 	public String getFile(String key) {
