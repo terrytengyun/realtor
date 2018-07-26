@@ -1,5 +1,7 @@
 package mercury.cloud.realtor.rest.services;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -26,6 +28,16 @@ public class PropertyService {
 	}
 	
 	public Property saveWithImages(Property property, MultipartFile[] images) {
+		/*
+		MultipartFile[] convertedImages = new MultipartFile[10];
+		int count = 0;
+		for(MultipartFile file: images) {
+			BufferedImage imgtest = (BufferedImage)file;
+			BufferedImage convertedImage = this.resizeImage(imgtest,imgtest.getType());
+			convertedImages[count] = (MultipartFile)convertedImage;
+			count++;
+		}
+		*/
 		Map<String,String> imgs = storageService.uploadFiles(images, property.getPropertyBasicField().getMlsNumber());
 		for(Map.Entry<String, String> entry : imgs.entrySet()) {
 			PropertyImage propertyImage = new PropertyImage();
@@ -40,6 +52,16 @@ public class PropertyService {
 			property.getPropertyBasicField().setThumbnail(entry.getValue());
 		}
 		return save(property);	
+	}
+	
+	
+	public BufferedImage resizeImage(BufferedImage originalImage, int type) {
+		BufferedImage resizedImage = new BufferedImage(1140,700, type);
+		Graphics2D g = resizedImage.createGraphics();
+		g.drawImage(originalImage, 0, 0, 1140, 700, null);
+		g.dispose();
+		
+		return resizedImage;
 	}
 	
 	public Optional<Property> findById(int id) {

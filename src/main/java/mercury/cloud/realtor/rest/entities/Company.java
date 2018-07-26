@@ -32,7 +32,7 @@ public class Company {
 	@Embedded
 	private CompanyContact companyContact;
 	
-	@Column(name="description")
+	@Column(name="description", length=5000)
 	private String description;
 	
 	@OneToMany
