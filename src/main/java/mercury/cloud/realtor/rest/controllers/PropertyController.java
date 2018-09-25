@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,14 +22,15 @@ import mercury.cloud.realtor.rest.services.PropertyService;
 
 @CrossOrigin(origins = "*")
 @RestController
+@RequestMapping(value="/company/{companyId}")
 public class PropertyController {
 
 	@Autowired
 	private PropertyService propertyService;
 	
 	
-	@GetMapping(value="/property/{id}")
-	public Optional<Property> findById(@PathVariable(value="id") int id) {
+	@GetMapping(value="/property/{propertyId}")
+	public Optional<Property> findById(@PathVariable(value="propertyId") int id) {
 		return this.propertyService.findById(id);
 	}
 	
@@ -67,8 +69,8 @@ public class PropertyController {
 		//return this.propertyService.save(property);
 	}
 	
-	@PutMapping(value="/property/{id}")
-	public Property update(@RequestBody Property property, @PathVariable int id) {
+	@PutMapping(value="/property/{propertyId}")
+	public Property update(@RequestBody Property property, @PathVariable(value="propertyId") int id) {
 		// update images on AWS storage first 
 		
 		property.setId(id);
@@ -81,8 +83,8 @@ public class PropertyController {
 		
 	}
 	
-	@DeleteMapping(value="/property/{id}/image/{imageId}")
-	public void deleteImage(@PathVariable(value="id") int id, @PathVariable(value="imageId") int imageId){
+	@DeleteMapping(value="/property/{propertyId}/image/{imageId}")
+	public void deleteImage(@PathVariable(value="propertyId") int id, @PathVariable(value="imageId") int imageId){
 		propertyService.deleteImage(id, imageId);
 	}
 	

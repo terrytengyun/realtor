@@ -62,7 +62,7 @@ public class RealtorController {
 		realtorProfile.setFirstName(firstName);
 		realtorProfile.setLastName(lastName);
 		realtorProfile.setTitle(title);
-		realtorProfile.setEmail(email);
+		//realtorProfile.setEmail(email);
 		realtorProfile.setOfficePhone(officePhone);
 		
 		return realtorService.saveProfile(realtorProfile, avatar, image);

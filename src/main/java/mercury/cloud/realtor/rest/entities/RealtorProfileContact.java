@@ -6,13 +6,11 @@ import javax.persistence.Embeddable;
 import lombok.Getter;
 import lombok.Setter;
 
-@Embeddable
 @Setter
 @Getter
-public class CustomerContact extends Contact {
-
+@Embeddable
+public class RealtorProfileContact extends Contact {
 	@Column(name="cellphone")
 	private String cellPhone;
 
-	
 }

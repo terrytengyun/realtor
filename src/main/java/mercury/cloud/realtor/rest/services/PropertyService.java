@@ -38,12 +38,9 @@ public class PropertyService {
 			count++;
 		}
 		*/
-		Map<String,String> imgs = storageService.uploadFiles(images, property.getPropertyBasicField().getMlsNumber());
+		Map<String,String> imgs = storageService.uploadFiles(property.getCompany().getId(),images, property.getPropertyBasicField().getMlsNumber());
 		for(Map.Entry<String, String> entry : imgs.entrySet()) {
-			PropertyImage propertyImage = new PropertyImage();
-			propertyImage.setBucket(storageService.getBucket());
-			propertyImage.setPathname(entry.getKey());
-			propertyImage.setUrl(entry.getValue());
+			PropertyImage propertyImage = new PropertyImage(entry.getValue(), storageService.getBucketPrefix()+property.getCompany().getId(), entry.getKey(),null);
 			property.getImages().add(propertyImage);
 		}
 		//set thumbnail 
@@ -74,7 +71,7 @@ public class PropertyService {
 			Collection<PropertyImage> images =  deletedProperty.get().getImages();
 			//---- how to make them like a transaction?
 			for(PropertyImage image : images) {
-				this.storageService.delete(image.getPathname());
+				this.storageService.delete(deletedProperty.get().getCompany().getId(),image.getPathname());
 			}
 			this.propertyDao.deleteById(id);
 		}
@@ -91,7 +88,7 @@ public class PropertyService {
 			for(PropertyImage img : images) {
 				if(img.getId() == imageId) {
 					images.remove(img);
-					storageService.delete(img.getPathname());
+					storageService.delete(property.get().getId(), img.getPathname());
 					break;
 				}
 			}

@@ -4,34 +4,20 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Configuration
 @PropertySource("classpath:configBase.properties")
 @ConfigurationProperties(prefix="base")
 public class ConfigPropertiesBase {
-	
+	@Getter
+	@Setter
 	public class Storage {
 		private String accessId;
 		private String accessToken;
 		private String bucket;
-		public String getAccessId() {
-			return accessId;
-		}
-		public void setAccessId(String accessId) {
-			this.accessId = accessId;
-		}
-		public String getAccessToken() {
-			return accessToken;
-		}
-		public void setAccessToken(String accessToken) {
-			this.accessToken = accessToken;
-		}
-		public String getBucket() {
-			return bucket;
-		}
-		public void setBucket(String bucket) {
-			this.bucket = bucket;
-		}
-		
+		private String path;
 	}
 	
 	private Storage storage;

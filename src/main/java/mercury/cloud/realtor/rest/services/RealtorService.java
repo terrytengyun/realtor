@@ -35,8 +35,8 @@ public class RealtorService {
 	public RealtorProfile saveProfile(RealtorProfile realtorProfile, MultipartFile avatar, MultipartFile image) {
 		
 		String key = realtorProfile.getFirstName()+"_"+realtorProfile.getLastName()+"_"+realtorProfile.getOfficePhone();
-		realtorProfile.setAvatar(storageService.uploadFile(avatar, key+"_avatar"));
-		realtorProfile.setImage(storageService.uploadFile(image, key+"_image"));
+		realtorProfile.setAvatar(storageService.uploadFile(realtorProfile.getCompany().getId(), avatar, key+"_avatar"));
+		realtorProfile.setImage(storageService.uploadFile(realtorProfile.getCompany().getId(), image, key+"_image"));
 		return realtorProfileDao.save(realtorProfile);
 	}
 	

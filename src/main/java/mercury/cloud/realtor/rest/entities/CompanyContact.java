@@ -3,7 +3,12 @@ package mercury.cloud.realtor.rest.entities;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Embeddable
+@Setter
+@Getter
 public class CompanyContact extends Contact{
 
 	@Column(name="contact_description")
@@ -14,30 +19,10 @@ public class CompanyContact extends Contact{
 	
 	@Column(name="fax")
 	private String fax;
+	
+	@Column(name="phone2")
+	private String phone2;
 
-	public String getContactDescription() {
-		return contactDescription;
-	}
-
-	public void setContactDescription(String contactDescription) {
-		this.contactDescription = contactDescription;
-	}
-
-	public String getWebsite() {
-		return website;
-	}
-
-	public void setWebsite(String website) {
-		this.website = website;
-	}
-
-	public String getFax() {
-		return fax;
-	}
-
-	public void setFax(String fax) {
-		this.fax = fax;
-	}
 	
 	
 }

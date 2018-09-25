@@ -7,9 +7,31 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Table(name="property_image")
+@Getter
+@Setter
 public class PropertyImage {
+
+	
+	public PropertyImage() {
+		
+	}
+	
+	
+	
+	public PropertyImage(String url, String bucket, String pathname, String description) {
+		super();
+		this.url = url;
+		this.bucket = bucket;
+		this.pathname = pathname;
+		this.description = description;
+	}
+
+
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -32,59 +54,6 @@ public class PropertyImage {
 	
 	@Column(name="description")
 	private String description;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	
-
-	public String getBucket() {
-		return bucket;
-	}
-
-	public void setBucket(String bucket) {
-		this.bucket = bucket;
-	}
-
-	public String getPathname() {
-		return pathname;
-	}
-
-	public void setPathname(String pathname) {
-		this.pathname = pathname;
-	}
-
-	/*
-	public int getPropertyId() {
-		return propertyId;
-	}
-
-	public void setPropertyId(int propertyId) {
-		this.propertyId = propertyId;
-	}
-	*/
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
 	
 	
 }

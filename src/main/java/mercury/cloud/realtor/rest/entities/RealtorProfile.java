@@ -1,12 +1,19 @@
 package mercury.cloud.realtor.rest.entities;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 @Entity
 @Table(name="realtor_profile")
 public class RealtorProfile {
@@ -27,8 +34,12 @@ public class RealtorProfile {
 	@Column(name="office_phone")
 	private String officePhone;
 	
-	@Column(name="email")
-	private String email;
+	@Embedded
+	private RealtorProfileContact contact;
+	
+	@ManyToOne
+	private Company company;
+	
 	
 	@Column(name="description", length=100000)
 	private String description;
@@ -41,79 +52,6 @@ public class RealtorProfile {
 	
 	@Column(name="image")
 	private String image;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getAvatar() {
-		return avatar;
-	}
-
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-
-	public String getOfficePhone() {
-		return officePhone;
-	}
-
-	public void setOfficePhone(String officePhone) {
-		this.officePhone = officePhone;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
 	
 	
 }

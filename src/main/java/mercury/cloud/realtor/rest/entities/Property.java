@@ -13,17 +13,26 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Table(name="PROPERTY")
+@Setter
+@Getter
 public class Property {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="ID")
 	private int id;
+	
+	@ManyToOne
+	private Company company;
 	
 	@Embedded
 	private PropertyBasicField propertyBasicField;
@@ -43,38 +52,5 @@ public class Property {
 			inverseJoinColumns=@JoinColumn(name="FIELD_ID")
 			)
 	private Collection<PropertyCustomField> customFeilds = new ArrayList<PropertyCustomField>();
-	
-	
-	
-	
-	
-
-	public PropertyBasicField getPropertyBasicField() {
-		return propertyBasicField;
-	}
-	public void setPropertyBasicField(PropertyBasicField propertyBasicField) {
-		this.propertyBasicField = propertyBasicField;
-	}
-	public Collection<PropertyImage> getImages() {
-		return images;
-	}
-	public void setImages(Collection<PropertyImage> images) {
-		this.images = images;
-	}
-	public Collection<PropertyCustomField> getCustomFeilds() {
-		return customFeilds;
-	}
-	public void setCustomFeilds(Collection<PropertyCustomField> customFeilds) {
-		this.customFeilds = customFeilds;
-	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	
-	
 	
 }

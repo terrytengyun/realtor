@@ -1,7 +1,7 @@
 package mercury.cloud.realtor.rest.services;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,12 +14,15 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.Permission;
 import com.amazonaws.services.s3.model.S3Object;
 
+import lombok.Getter;
+import lombok.Setter;
 import mercury.cloud.realtor.rest.configurations.ConfigPropertiesBase;
 
 @Service
+@Getter
+@Setter
 public class StorageService {
 
 	@Autowired
@@ -29,30 +32,31 @@ public class StorageService {
 	@Autowired
 	private AmazonS3 s3;
 	
-	
-	@Value("${cloud.aws.s3.bucket}")
-	private String bucket;
+	@Value("${cloud.s3.bucket.prefix}")
+	private String bucketPrefix;
 	
 	
 	public StorageService() {
 	}
 	
-	public String getBucket() {
-		return bucket;
-	}
-	
 
 	
-	public Map<String,String> uploadFiles(MultipartFile[] files, String key) {
+	
+	public Map<String,String> uploadFiles(int companyId, MultipartFile[] files, String key) {
 
-		Map<String,String> urls = new HashMap<String, String>();
 		
+		
+		Map<String,String> urls = new HashMap<String, String>();
+		String bucket = bucketPrefix + companyId;
+		if(!s3.doesBucketExistV2(bucket)) {
+			s3.createBucket(bucket);
+		}
 		if(files.length > 0 ) {
 			String filename = "";
 			int i = 0;
 			for(MultipartFile file : files) {
 					filename = key+"-"+i;
-					uploadFile(file, filename);
+					uploadFile(companyId, file, filename);
 					urls.put(filename, s3.getUrl(bucket, filename).toString());
 					i++;
 				}
@@ -62,15 +66,18 @@ public class StorageService {
 		
 	}
 	
-	public String uploadFile(MultipartFile file, String key) {
-
+	public String uploadFile(int companyId, MultipartFile file, String key) {
+			String bucket = bucketPrefix + companyId;
+			if(!s3.doesBucketExistV2(bucket)) {
+				s3.createBucket(bucket);
+			}
 			if(!file.isEmpty()) {
 				
 				ObjectMetadata metadata = new ObjectMetadata();
 	            metadata.setContentType(file.getContentType());
 	           
 				try {
-					s3.putObject(this.bucket, key, file.getInputStream(), metadata);
+					s3.putObject(bucket, key, file.getInputStream(), metadata);
 					return s3.getUrl(bucket, key).toString();
 					
 					
@@ -87,14 +94,29 @@ public class StorageService {
 			
 			}
 			return null;
-		}
+	}
 	
-	public String getFile(String key) {
-		S3Object file = s3.getObject(this.bucket, key);
+	public String uploadFile(int companyId, File file, String key) {
+		String bucket = bucketPrefix + companyId;
+		if(!s3.doesBucketExistV2(bucket)) {
+			s3.createBucket(bucket);
+		}
+		ObjectMetadata metadata = new ObjectMetadata();
+		metadata.setContentType("image/jpeg");
+		s3.putObject(bucket, key, file);
+		return s3.getUrl(bucket, key).toString();
+
+	}
+	
+	
+	public String getFile(int companyId, String key) {
+		String bucket = bucketPrefix + companyId;
+		S3Object file = s3.getObject(bucket, key);
 		return null;
 	}
 	
-	public void delete(String key) {
+	public void delete(int companyId, String key) {
+		String bucket = bucketPrefix + companyId;
 		s3.deleteObject(bucket, key);
 	}
 	

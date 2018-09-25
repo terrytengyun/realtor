@@ -7,9 +7,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Table(name="PROPERTY_CUSTOM_FIELD")
+@Setter
+@Getter
 public class PropertyCustomField {
+	
+	public PropertyCustomField(String name, String value) {
+		this.name = name;
+		this.value = value;
+	}
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -25,37 +35,4 @@ public class PropertyCustomField {
 	@Column(name="CATEGORY")
 	private String category;
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
-
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
-	
-	
 }
