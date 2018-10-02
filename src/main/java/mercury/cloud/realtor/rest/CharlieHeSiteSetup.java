@@ -1,6 +1,7 @@
 package mercury.cloud.realtor.rest;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,28 +21,41 @@ import mercury.cloud.realtor.rest.entities.PropertyCustomField;
 import mercury.cloud.realtor.rest.entities.PropertyImage;
 import mercury.cloud.realtor.rest.entities.RealtorProfile;
 import mercury.cloud.realtor.rest.entities.RealtorProfileContact;
+import mercury.cloud.realtor.rest.services.CompanyService;
+import mercury.cloud.realtor.rest.services.Constants;
+import mercury.cloud.realtor.rest.services.PropertyService;
+import mercury.cloud.realtor.rest.services.RealtorService;
 import mercury.cloud.realtor.rest.services.StorageService;
 
 @SpringBootApplication
 public class CharlieHeSiteSetup {
 
+	private static CompanyService companyService;
+	private static RealtorService realtorService;
+	private static PropertyService propertyService;
+	private static StorageService storageService;
 	
 	public static void main(String[] args) {
 		ConfigurableApplicationContext ctx = SpringApplication.run(CharlieHeSiteSetup.class);
-		createCompany(ctx);
+		companyService = ctx.getBean(CompanyService.class);
+		realtorService = ctx.getBean(RealtorService.class);
+		propertyService = ctx.getBean(PropertyService.class);
+		storageService = ctx.getBean(StorageService.class);
+		createCompany();
+		
 
 	}
 	
-	private static void createCompany(ConfigurableApplicationContext ctx) {
-		CompanyController companyController = ctx.getBean(CompanyController.class);
+	private static void createCompany() {
+	
 		Company company = new Company();
 		company.setId(0001);
 		company.setName("CharliesTeam");
 		company.setDescription("CharlieTeam description ....");
 		createCompanyContact(company);
 		createRealtorProfiles(company);
-		createProperties(company, ctx);
-		companyController.save(company);
+		createProperties(company);
+		companyService.save(company);
 	}
 	
 	private static void createCompanyContact(Company company) {
@@ -53,6 +67,7 @@ public class CharlieHeSiteSetup {
 		contact.setWebsite("http://www.charliehe.com");
 		contact.setAddress("30 Fulton Way, Richmond Hill ON L4B1E6");
 		company.setCompanyContact(contact);
+		companyService.save(company);
 	}
 	
 	private static void createRealtorProfiles(Company company) {
@@ -65,8 +80,21 @@ public class CharlieHeSiteSetup {
 		RealtorProfileContact contact = new RealtorProfileContact();
 		contact.setCellPhone("4165059828");
 		contact.setPhone("4165005888");
-		contact.setEmail("charlierkhe@gmail.com");
+		contact.setEmail("charlierkhe@gmail.com");		
 		charlie.setContact(contact);
+		
+		try {
+			StorageService.resize(p1img1_orig.getAbsolutePath(), imagePath + p1.getPropertyBasicField().getMlsNumber()+"-1_resize.jpg", Constants.PROPERTY_IMAGE_WIDTH, Constants.PROPERTY_IMAGE_HEIGHT);
+			StorageService.resize(p1img2_orig.getAbsolutePath(), imagePath + p1.getPropertyBasicField().getMlsNumber()+"-2_resize.jpg", Constants.PROPERTY_IMAGE_WIDTH, Constants.PROPERTY_IMAGE_HEIGHT);
+			StorageService.resize(p1img3_orig.getAbsolutePath(), imagePath + p1.getPropertyBasicField().getMlsNumber()+"-3_resize.jpg", Constants.PROPERTY_IMAGE_WIDTH, Constants.PROPERTY_IMAGE_HEIGHT);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		File p1img1 = new File(imagePath + p1.getPropertyBasicField().getMlsNumber() + "-1_resize.jpg");
+		File p1img2 = new File(imagePath + p1.getPropertyBasicField().getMlsNumber() + "-2_resize.jpg");
+		File p1img3 = new File(imagePath + p1.getPropertyBasicField().getMlsNumber() + "-3_resize.jpg");
+		charlie.setImage(image);
 		// charlie.setImage()
 		/**************** End of Charlie *****************/
 		
@@ -99,15 +127,27 @@ public class CharlieHeSiteSetup {
 		realtors.add(chao);
 		realtors.add(lili);
 		company.setRealtors(realtors);
+		charlie.setCompany(company);
+		chao.setCompany(company);
+		lili.setCompany(company);
+		realtorService.saveProfile(charlie);
+		realtorService.saveProfile(chao);
+		realtorService.saveProfile(lili);
+		companyService.save(company);
+		
+		
 	}
 	
-	private static void createProperties(Company company, ConfigurableApplicationContext ctx) {
+	private static void createProperties(Company company) {
 		
+		/*
 		ConfigPropertiesBase baseProps = ctx.getBean(ConfigPropertiesBase.class);
 		String imagePath =  baseProps.getStorage().getPath();
 		System.out.println("-------------------------------- ImagePath : "+ baseProps.getStorage().getPath());
 		
 		StorageService storageService = ctx.getBean(StorageService.class);
+		*/
+		String imagePath = "C:\\Development\\Companies\\Realtor\\propertyImages\\";
 		
 		/******************** Property 1 ***********************************/
 		Property p1 = new Property();
@@ -165,9 +205,22 @@ public class CharlieHeSiteSetup {
 		p1.setPropertyBasicField(baseFlds1);
 		p1.setCustomFeilds(customFields);
 		
-		File p1img1 = new File(imagePath + p1.getPropertyBasicField().getMlsNumber() + "-1.jpg");
-		File p1img2 = new File(imagePath + p1.getPropertyBasicField().getMlsNumber() + "-2.jpg");
-		File p1img3 = new File(imagePath + p1.getPropertyBasicField().getMlsNumber() + "-3.jpg");
+		File p1img1_orig = new File(imagePath + p1.getPropertyBasicField().getMlsNumber() + "-1.jpg");
+		File p1img2_orig = new File(imagePath + p1.getPropertyBasicField().getMlsNumber() + "-2.jpg");
+		File p1img3_orig = new File(imagePath + p1.getPropertyBasicField().getMlsNumber() + "-3.jpg");
+		
+		try {
+			StorageService.resize(p1img1_orig.getAbsolutePath(), imagePath + p1.getPropertyBasicField().getMlsNumber()+"-1_resize.jpg", Constants.PROPERTY_IMAGE_WIDTH, Constants.PROPERTY_IMAGE_HEIGHT);
+			StorageService.resize(p1img2_orig.getAbsolutePath(), imagePath + p1.getPropertyBasicField().getMlsNumber()+"-2_resize.jpg", Constants.PROPERTY_IMAGE_WIDTH, Constants.PROPERTY_IMAGE_HEIGHT);
+			StorageService.resize(p1img3_orig.getAbsolutePath(), imagePath + p1.getPropertyBasicField().getMlsNumber()+"-3_resize.jpg", Constants.PROPERTY_IMAGE_WIDTH, Constants.PROPERTY_IMAGE_HEIGHT);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		File p1img1 = new File(imagePath + p1.getPropertyBasicField().getMlsNumber() + "-1_resize.jpg");
+		File p1img2 = new File(imagePath + p1.getPropertyBasicField().getMlsNumber() + "-2_resize.jpg");
+		File p1img3 = new File(imagePath + p1.getPropertyBasicField().getMlsNumber() + "-3_resize.jpg");
+		
 		ArrayList<PropertyImage> images = new ArrayList<PropertyImage>();
 		String bucket = storageService.getBucketPrefix()+company.getId();
 		PropertyImage image1 = new PropertyImage(storageService.uploadFile(company.getId(), p1img1, p1img1.getName()), bucket ,p1img1.getName(),null);
@@ -177,6 +230,7 @@ public class CharlieHeSiteSetup {
 		images.add(image2);
 		images.add(image3);
 		p1.setImages(images);
+		p1.getPropertyBasicField().setThumbnail(image1.getUrl());
 		
 		
 		/**************** End of Property 1 *********************************/
@@ -237,10 +291,25 @@ public class CharlieHeSiteSetup {
 		p2.setPropertyBasicField(baseFlds2);
 		p2.setCustomFeilds(customFields2);
 		
-		File p2img1 = new File(imagePath + p2.getPropertyBasicField().getMlsNumber() + "-1.jpg");
-		File p2img2 = new File(imagePath + p2.getPropertyBasicField().getMlsNumber() + "-2.jpg");
-		File p2img3 = new File(imagePath + p2.getPropertyBasicField().getMlsNumber() + "-3.jpg");
-		File p2img4 = new File(imagePath + p2.getPropertyBasicField().getMlsNumber() + "-4.jpg");
+		File p2img1_orig = new File(imagePath + p2.getPropertyBasicField().getMlsNumber() + "-1.jpg");
+		File p2img2_orig = new File(imagePath + p2.getPropertyBasicField().getMlsNumber() + "-2.jpg");
+		File p2img3_orig = new File(imagePath + p2.getPropertyBasicField().getMlsNumber() + "-3.jpg");
+		File p2img4_orig = new File(imagePath + p2.getPropertyBasicField().getMlsNumber() + "-4.jpg");
+		
+		try {
+			StorageService.resize(p2img1_orig.getAbsolutePath(), imagePath + p2.getPropertyBasicField().getMlsNumber()+"-1_resize.jpg", Constants.PROPERTY_IMAGE_WIDTH, Constants.PROPERTY_IMAGE_HEIGHT);
+			StorageService.resize(p2img2_orig.getAbsolutePath(), imagePath + p2.getPropertyBasicField().getMlsNumber()+"-2_resize.jpg", Constants.PROPERTY_IMAGE_WIDTH, Constants.PROPERTY_IMAGE_HEIGHT);
+			StorageService.resize(p2img3_orig.getAbsolutePath(), imagePath + p2.getPropertyBasicField().getMlsNumber()+"-3_resize.jpg", Constants.PROPERTY_IMAGE_WIDTH, Constants.PROPERTY_IMAGE_HEIGHT);
+			StorageService.resize(p2img4_orig.getAbsolutePath(), imagePath + p2.getPropertyBasicField().getMlsNumber()+"-4_resize.jpg", Constants.PROPERTY_IMAGE_WIDTH, Constants.PROPERTY_IMAGE_HEIGHT);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		File p2img1 = new File(imagePath + p2.getPropertyBasicField().getMlsNumber() + "-1_resize.jpg");
+		File p2img2 = new File(imagePath + p2.getPropertyBasicField().getMlsNumber() + "-2_resize.jpg");
+		File p2img3 = new File(imagePath + p2.getPropertyBasicField().getMlsNumber() + "-3_resize.jpg");
+		File p2img4 = new File(imagePath + p2.getPropertyBasicField().getMlsNumber() + "-4_resize.jpg");
+		
 		ArrayList<PropertyImage> images2 = new ArrayList<PropertyImage>();
 		//String bucket = storageService.getBucketPrefix()+company.getId();
 		PropertyImage p2image1 = new PropertyImage(storageService.uploadFile(company.getId(), p2img1, p2img1.getName()), bucket ,p2img1.getName(),null);
@@ -252,6 +321,7 @@ public class CharlieHeSiteSetup {
 		images2.add(p2image3);
 		images2.add(p2image4);
 		p2.setImages(images2);
+		p2.getPropertyBasicField().setThumbnail(p2image1.getUrl());
 		
 		/**************** End of Property 2 *********************************/
 		
@@ -311,10 +381,25 @@ public class CharlieHeSiteSetup {
 		p3.setPropertyBasicField(baseFlds3);
 		p3.setCustomFeilds(customFields3);
 		
-		File p3img1 = new File(imagePath + p3.getPropertyBasicField().getMlsNumber() + "-1.jpg");
-		File p3img2 = new File(imagePath + p3.getPropertyBasicField().getMlsNumber() + "-2.jpg");
-		File p3img3 = new File(imagePath + p3.getPropertyBasicField().getMlsNumber() + "-3.jpg");
-		File p3img4 = new File(imagePath + p3.getPropertyBasicField().getMlsNumber() + "-4.jpg");
+		File p3img1_orig = new File(imagePath + p3.getPropertyBasicField().getMlsNumber() + "-1.jpg");
+		File p3img2_orig = new File(imagePath + p3.getPropertyBasicField().getMlsNumber() + "-2.jpg");
+		File p3img3_orig = new File(imagePath + p3.getPropertyBasicField().getMlsNumber() + "-3.jpg");
+		File p3img4_orig = new File(imagePath + p3.getPropertyBasicField().getMlsNumber() + "-4.jpg");
+		
+		try {
+			StorageService.resize(p3img1_orig.getAbsolutePath(), imagePath + p3.getPropertyBasicField().getMlsNumber()+"-1_resize.jpg", Constants.PROPERTY_IMAGE_WIDTH, Constants.PROPERTY_IMAGE_HEIGHT);
+			StorageService.resize(p3img2_orig.getAbsolutePath(), imagePath + p3.getPropertyBasicField().getMlsNumber()+"-2_resize.jpg", Constants.PROPERTY_IMAGE_WIDTH, Constants.PROPERTY_IMAGE_HEIGHT);
+			StorageService.resize(p3img3_orig.getAbsolutePath(), imagePath + p3.getPropertyBasicField().getMlsNumber()+"-3_resize.jpg", Constants.PROPERTY_IMAGE_WIDTH, Constants.PROPERTY_IMAGE_HEIGHT);
+			StorageService.resize(p3img4_orig.getAbsolutePath(), imagePath + p3.getPropertyBasicField().getMlsNumber()+"-4_resize.jpg", Constants.PROPERTY_IMAGE_WIDTH, Constants.PROPERTY_IMAGE_HEIGHT);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		File p3img1 = new File(imagePath + p3.getPropertyBasicField().getMlsNumber() + "-1_resize.jpg");
+		File p3img2 = new File(imagePath + p3.getPropertyBasicField().getMlsNumber() + "-2_resize.jpg");
+		File p3img3 = new File(imagePath + p3.getPropertyBasicField().getMlsNumber() + "-3_resize.jpg");
+		File p3img4 = new File(imagePath + p3.getPropertyBasicField().getMlsNumber() + "-4_resize.jpg");
+		
 		ArrayList<PropertyImage> images3 = new ArrayList<PropertyImage>();
 		//String bucket = storageService.getBucketPrefix()+company.getId();
 		PropertyImage p3image1 = new PropertyImage(storageService.uploadFile(company.getId(), p3img1, p3img1.getName()), bucket ,p3img1.getName(),null);
@@ -326,6 +411,7 @@ public class CharlieHeSiteSetup {
 		images3.add(p3image3);
 		images3.add(p3image4);
 		p3.setImages(images3);
+		p3.getPropertyBasicField().setThumbnail(p3image1.getUrl());
 		
 		/**************** End of Property 3 *********************************/
 		
@@ -389,9 +475,21 @@ public class CharlieHeSiteSetup {
 		p4.setPropertyBasicField(baseFlds4);
 		p4.setCustomFeilds(customFields4);
 		
-		File p4img1 = new File(imagePath + p3.getPropertyBasicField().getMlsNumber() + "-1.jpg");
-		File p4img2 = new File(imagePath + p3.getPropertyBasicField().getMlsNumber() + "-2.jpg");
-		File p4img3 = new File(imagePath + p3.getPropertyBasicField().getMlsNumber() + "-3.jpg");
+		File p4img1_orig = new File(imagePath + p4.getPropertyBasicField().getMlsNumber() + "-1.jpg");
+		File p4img2_orig = new File(imagePath + p4.getPropertyBasicField().getMlsNumber() + "-2.jpg");
+		File p4img3_orig = new File(imagePath + p4.getPropertyBasicField().getMlsNumber() + "-3.jpg");
+		
+		try {
+			StorageService.resize(p4img1_orig.getAbsolutePath(), imagePath + p4.getPropertyBasicField().getMlsNumber()+"-1_resize.jpg", Constants.PROPERTY_IMAGE_WIDTH, Constants.PROPERTY_IMAGE_HEIGHT);
+			StorageService.resize(p4img2_orig.getAbsolutePath(), imagePath + p4.getPropertyBasicField().getMlsNumber()+"-2_resize.jpg", Constants.PROPERTY_IMAGE_WIDTH, Constants.PROPERTY_IMAGE_HEIGHT);
+			StorageService.resize(p4img3_orig.getAbsolutePath(), imagePath + p4.getPropertyBasicField().getMlsNumber()+"-3_resize.jpg", Constants.PROPERTY_IMAGE_WIDTH, Constants.PROPERTY_IMAGE_HEIGHT);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		File p4img1 = new File(imagePath + p4.getPropertyBasicField().getMlsNumber() + "-1_resize.jpg");
+		File p4img2 = new File(imagePath + p4.getPropertyBasicField().getMlsNumber() + "-2_resize.jpg");
+		File p4img3 = new File(imagePath + p4.getPropertyBasicField().getMlsNumber() + "-3_resize.jpg");
 		ArrayList<PropertyImage> images4 = new ArrayList<PropertyImage>();
 		//String bucket = storageService.getBucketPrefix()+company.getId();
 		PropertyImage p4image1 = new PropertyImage(storageService.uploadFile(company.getId(), p4img1, p4img1.getName()), bucket ,p4img1.getName(),null);
@@ -401,7 +499,7 @@ public class CharlieHeSiteSetup {
 		images4.add(p4image2);
 		images4.add(p4image3);
 		p4.setImages(images4);
-		
+		p4.getPropertyBasicField().setThumbnail(p4image1.getUrl());
 		/**************** End of Property 4 *********************************/
 		
 		Set<Property> properties = new HashSet<Property>();

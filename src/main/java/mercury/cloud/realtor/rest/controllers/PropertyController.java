@@ -22,7 +22,7 @@ import mercury.cloud.realtor.rest.services.PropertyService;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping(value="/company/{companyId}")
+//@RequestMapping(value="/company/{companyId}")
 public class PropertyController {
 
 	@Autowired

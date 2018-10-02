@@ -2,6 +2,7 @@ package mercury.cloud.realtor.rest.entities;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -13,6 +14,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -40,20 +43,22 @@ public class Company {
 	@Column(name="description", length=5000)
 	private String description;
 	
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	@JoinTable(
 		name="company_property_rel", 
 		joinColumns= {@JoinColumn(name="company_id")}, 
 		inverseJoinColumns= {@JoinColumn(name="property_id")}
 	)
+	@JsonManagedReference
 	private Set<Property> properties;
 	
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	@JoinTable(
 		name="company_realtor_rel",
 		joinColumns= {@JoinColumn(name="company_id")},
 		inverseJoinColumns= {@JoinColumn(name="realtor_id")}
 	)
+	@JsonManagedReference
 	private Set<RealtorProfile> realtors;
 	
 	@ManyToMany

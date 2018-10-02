@@ -16,6 +16,10 @@ import lombok.Setter;
 @Getter
 public class PropertyCustomField {
 	
+	public PropertyCustomField() {
+		
+	}
+	
 	public PropertyCustomField(String name, String value) {
 		this.name = name;
 		this.value = value;

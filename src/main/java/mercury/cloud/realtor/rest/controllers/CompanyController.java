@@ -29,7 +29,8 @@ public class CompanyController {
 	
 	@GetMapping(value="/company/{id}")
 	public Optional<Company> findById(@PathVariable(value="id") int id) {
-		return companyService.findById(id);
+		Optional<Company> comp =  companyService.findById(id);
+		return comp;
 	}
 	
 	@DeleteMapping(value="/company/{id}")
